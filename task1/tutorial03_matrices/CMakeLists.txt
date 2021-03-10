@@ -1,15 +1,11 @@
 add_executable(tutorial03_matrices
         tutorial03.cpp
-        ${TASK_1_DIR}/common/shader.cpp
-        ${TASK_1_DIR}/common/shader.hpp
-        SimpleTransform.vertexshader
-        SingleColor.fragmentshader)
+        ${TASK_1_SOURCE_DIR}/common/shader.cpp
+        ${TASK_1_SOURCE_DIR}/common/shader.hpp)
 target_link_libraries(tutorial03_matrices ${ALL_LIBS})
-target_include_directories(tutorial03_matrices PRIVATE ${TASK_1_DIR})
+target_include_directories(tutorial03_matrices PRIVATE ${TASK_1_SOURCE_DIR})
 
-configure_file(SimpleTransform.vertexshader
-        ${CMAKE_CURRENT_BINARY_DIR}/SimpleTransform.vertexshader
-        COPYONLY)
-configure_file(SingleColor.fragmentshader
-        ${CMAKE_CURRENT_BINARY_DIR}/SingleColor.fragmentshader
-        COPYONLY)
+set(DST ${TASK_1_INSTALL_DIR}/tutorial03_matrices)
+install(TARGETS tutorial03_matrices DESTINATION ${DST})
+install(FILES SimpleTransform.vertexshader SingleColor.fragmentshader
+        DESTINATION ${DST})
