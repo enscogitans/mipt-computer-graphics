@@ -8,3 +8,4 @@ include_directories(${EXTERNAL_INCLUDES})
 link_directories(${EXTERNAL_LINKS})
 
 add_subdirectory(task1)
+add_subdirectory(task2)
