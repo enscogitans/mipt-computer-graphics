@@ -3,10 +3,33 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <common/shader.hpp>
 #include <common/defer.hpp>
 #include <common/exception.hpp>
+
+
+glm::mat4 ComputeMvp(double time_now) {
+    // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+    static const glm::mat4 projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    static const glm::mat4 model = glm::mat4(1.0f);  // Model matrix: an identity matrix (model will be at the origin)
+
+    const double radius = 4;
+    glm::vec3 camera_pos = {
+            radius * sin(time_now),
+            0,
+            radius * cos(time_now),
+    };
+
+    glm::mat4 view = glm::lookAt(  // Camera matrix
+            camera_pos,  // Camera is at (4,3,3), in World Space
+            glm::vec3(0, 0, 0),  // and looks at the origin
+            glm::vec3(0, 1, 0)   // Head is up
+    );
+    return projection * view * model;
+}
 
 
 int main() {
@@ -85,6 +108,10 @@ int main() {
         glDeleteBuffers(1, &vertex_buffer_2);
     };
 
+    // Get a handle for our "mvp" uniform
+    GLuint matrix_id_1 = glGetUniformLocation(program_id_1, "mvp");
+    GLuint matrix_id_2 = glGetUniformLocation(program_id_2, "mvp");
+
     // Enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -93,11 +120,16 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);  // Clear the screen
 
-        for (auto& [program_id, vertex_buffer] : std::initializer_list<std::pair<GLuint&, GLuint&>>{
-                {program_id_1, vertex_buffer_1},
-                {program_id_2, vertex_buffer_2}
+        for (auto& [program_id, vertex_buffer, matrix_id] : std::initializer_list<std::tuple<GLuint&, GLuint&, GLuint&>>{
+                {program_id_1, vertex_buffer_1, matrix_id_1},
+                {program_id_2, vertex_buffer_2, matrix_id_2}
         }) {
-            glUseProgram(program_id);      // Use our shader
+            glUseProgram(program_id);  // Use our shader
+
+            double time_now = glfwGetTime();
+            glm::mat4 mvp = ComputeMvp(time_now);
+            glUniformMatrix4fv(matrix_id, 1, GL_FALSE, glm::value_ptr(mvp));  // Send our transformation
+
             glEnableVertexAttribArray(0);  // 1st attribute buffer : vertices
             glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
