@@ -45,7 +45,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Task 2", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Task 3", nullptr, nullptr);
     if (!window) {
         std::cerr << "Failed to open GLFW window. "
                      "If you have an Intel GPU, they are not 3.3 compatible. "
