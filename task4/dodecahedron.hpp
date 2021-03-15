@@ -323,4 +323,4 @@ const GLfloat kColors[] = {
 
 static_assert(sizeof(kTriangles) == sizeof(kColors), "Array sizes must be equal");
 
-}  // namespace geometry
+}  // namespace dodecahedron

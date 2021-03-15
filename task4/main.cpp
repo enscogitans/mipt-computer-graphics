@@ -25,8 +25,8 @@ glm::mat4 ComputeMvp(double time_now) {
     };
 
     glm::mat4 view = glm::lookAt(  // Camera matrix
-            camera_pos,  // Camera is at (4,3,3), in World Space
-            glm::vec3(0, 0, 0),  // and looks at the origin
+            camera_pos,
+            glm::vec3(0, 0, 0),  // It looks at the origin
             glm::vec3(0, 1, 0)   // Head is up
     );
     return projection * view * model;
