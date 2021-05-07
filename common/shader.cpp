@@ -4,28 +4,16 @@
 #include <iostream>
 
 #include "defer.hpp"
-#include "exception.hpp"
+#include "misc.hpp"
 
-
-namespace {
-
-std::string ReadShaderContents(const std::filesystem::path& file_path) {
-    std::ifstream stream(file_path.string());
-    if (!stream) {
-        throw utils::IOException("Can't open shader \"" + file_path.string() + "\"");
-    }
-    return {std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
-}
-
-}  // namespace
 
 
 namespace utils {
 
 GLuint LoadShaders(const std::filesystem::path& vertex_shader_path,
                    const std::filesystem::path& fragment_shader_path) {
-    std::string vertex_shader_code = ReadShaderContents(vertex_shader_path);
-    std::string fragment_shader_code = ReadShaderContents(fragment_shader_path);
+    std::string vertex_shader_code = ReadFileContents(vertex_shader_path);
+    std::string fragment_shader_code = ReadFileContents(fragment_shader_path);
 
     // Create shaders
     GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
@@ -52,7 +40,7 @@ GLuint LoadShaders(const std::filesystem::path& vertex_shader_path,
             GLsizei buf_size;
             GLsizei log_length;
             glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &buf_size);
-            std::unique_ptr<char[]> info_log(new char[buf_size]);
+            std::unique_ptr<char> info_log(new char[buf_size]);
             glGetShaderInfoLog(shader_id, buf_size, &log_length, info_log.get());
 
             std::cerr << "Couldn't compile shader " << shader_name << ": ";
@@ -77,7 +65,7 @@ GLuint LoadShaders(const std::filesystem::path& vertex_shader_path,
         GLsizei buf_size;
         GLsizei log_length;
         glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &buf_size);
-        std::unique_ptr<char[]> info_log(new char[buf_size]);
+        std::unique_ptr<char> info_log(new char[buf_size]);
         glGetProgramInfoLog(program_id, buf_size, &log_length, info_log.get());
 
         std::cerr << "Couldn't link program: ";

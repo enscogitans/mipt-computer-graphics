@@ -3,6 +3,7 @@ set(ALL_LIBS glew32s glfw glm ${OPENGL_LIBRARY})
 
 set(TASK_1_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(TASK_1_INSTALL_DIR task1)
+set(TASK_1_COMPONENT hw1)
 
 add_subdirectory(tutorial01_first_window)
 add_subdirectory(tutorial02_red_triangle)

@@ -6,6 +6,6 @@ target_link_libraries(tutorial02_red_triangle ${ALL_LIBS})
 target_include_directories(tutorial02_red_triangle PRIVATE ${TASK_1_SOURCE_DIR})
 
 set(DST ${TASK_1_INSTALL_DIR}/tutorial02_red_triangle)
-install(TARGETS tutorial02_red_triangle DESTINATION ${DST})
+install(TARGETS tutorial02_red_triangle DESTINATION ${DST} COMPONENT ${TASK_1_COMPONENT})
 install(FILES SimpleFragmentShader.fragmentshader SimpleVertexShader.vertexshader
-        DESTINATION ${DST})
+        DESTINATION ${DST} COMPONENT ${TASK_1_COMPONENT})

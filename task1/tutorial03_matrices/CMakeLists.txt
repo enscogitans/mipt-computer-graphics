@@ -6,6 +6,6 @@ target_link_libraries(tutorial03_matrices ${ALL_LIBS})
 target_include_directories(tutorial03_matrices PRIVATE ${TASK_1_SOURCE_DIR})
 
 set(DST ${TASK_1_INSTALL_DIR}/tutorial03_matrices)
-install(TARGETS tutorial03_matrices DESTINATION ${DST})
+install(TARGETS tutorial03_matrices DESTINATION ${DST} COMPONENT ${TASK_1_COMPONENT})
 install(FILES SimpleTransform.vertexshader SingleColor.fragmentshader
-        DESTINATION ${DST})
+        DESTINATION ${DST} COMPONENT ${TASK_1_COMPONENT})
